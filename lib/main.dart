@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import './widgets/new_transaction.dart';
 import './widgets/transaction_list.dart';
@@ -14,42 +12,58 @@ void main() {
   //   DeviceOrientation.portraitUp,
   //   DeviceOrientation.portraitUp,
   // ]);
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Personal Expenses',
       theme: ThemeData(
-          primarySwatch: Colors.purple,
-          accentColor: Colors.amber,
-          // errorColor: Colors.red,
           fontFamily: 'Quicksand',
           textTheme: ThemeData.light().textTheme.copyWith(
-                headline6: TextStyle(
+                headline6: const TextStyle(
                   fontFamily: 'OpenSans',
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
-                button: TextStyle(color: Colors.white),
+                button: const TextStyle(color: Colors.white),
               ),
           appBarTheme: AppBarTheme(
-            textTheme: ThemeData.light().textTheme.copyWith(
-                  headline6: TextStyle(
+            toolbarTextStyle: ThemeData.light()
+                .textTheme
+                .copyWith(
+                  headline6: const TextStyle(
                     fontFamily: 'OpenSans',
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
-                ),
-          )),
-      home: MyHomePage(),
+                )
+                .bodyText2,
+            titleTextStyle: ThemeData.light()
+                .textTheme
+                .copyWith(
+                  headline6: const TextStyle(
+                    fontFamily: 'OpenSans',
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+                .headline6,
+          ),
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple)
+              .copyWith(secondary: Colors.amber)),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
   // String titleInput;
   // String amountInput;
   @override
@@ -77,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return _userTransactions.where((tx) {
       return tx.date.isAfter(
         DateTime.now().subtract(
-          Duration(days: 7),
+          const Duration(days: 7),
         ),
       );
     }).toList();
@@ -103,8 +117,8 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (_) {
         return GestureDetector(
           onTap: () {},
-          child: NewTransaction(_addNewTransaction),
           behavior: HitTestBehavior.opaque,
+          child: NewTransaction(_addNewTransaction),
         );
       },
     );
@@ -127,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
             style: Theme.of(context).textTheme.headline6,
           ),
           Switch.adaptive(
-            activeColor: Theme.of(context).accentColor,
+            activeColor: Theme.of(context).colorScheme.secondary,
             value: _showChart,
             onChanged: (val) {
               setState(() {
@@ -138,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       _showChart
-          ? Container(
+          ? SizedBox(
               height: (mediaQuery.size.height -
                       appBar.preferredSize.height -
                       mediaQuery.padding.top) *
@@ -152,7 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> _buildPortraitContent(
       MediaQueryData mediaQuery, PreferredSizeWidget appBar, Widget txWidget) {
     return [
-      Container(
+      SizedBox(
         height: (mediaQuery.size.height -
                 appBar.preferredSize.height -
                 mediaQuery.padding.top) *
@@ -168,17 +182,17 @@ class _MyHomePageState extends State<MyHomePage> {
     final mediaQuery = MediaQuery.of(context);
     final isLandscape = mediaQuery.orientation == Orientation.landscape;
     final PreferredSizeWidget appBar = AppBar(
-      title: Text(
+      title: const Text(
         'Personal Expenses',
       ),
       actions: <Widget>[
         IconButton(
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
           onPressed: () => _startAddNewTransaction(context),
         ),
       ],
     );
-    final txListWidget = Container(
+    final txListWidget = SizedBox(
       height: (mediaQuery.size.height -
               appBar.preferredSize.height -
               mediaQuery.padding.top) *
@@ -207,7 +221,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: Platform.isIOS
           ? Container()
           : FloatingActionButton(
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
               onPressed: () => _startAddNewTransaction(context),
             ),
     );
